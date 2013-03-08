@@ -121,12 +121,13 @@ def depthFirstSearch(problem):
                     expanded.append( current )
                     node_list[state] = { 'action':action, 'cost':cost, 'parent' : current }
                     stack.append( state )
-                    
-                
+
 
 def getActions(state, nodes):
 
     result = []
+
+    print_r(nodes)
 
     while (nodes[state]['parent'] != None) :
         result.append(nodes[state]['action'])
@@ -143,7 +144,29 @@ def breadthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    util.raiseNotDefined()
+    start = problem.getStartState()
+    node_list = { start: { 'action': None, 'cost': None, 'parent' : None } };
+    closed = [] ;
+    stack = [ start ]
+
+    while len(stack) > 0:
+
+        current = stack.pop()
+        
+        if problem.isGoalState(current):
+            return getActions(current, node_list)
+        
+        if current not in closed:
+            closed.append(current)
+
+            for node in problem.getSuccessors(current):
+
+                state, action, cost = node;
+                if state not in node_list:
+                    node_list[state] = { 'action':action, 'cost':cost, 'parent' : current }
+                
+                stack.insert(0, state )
+                
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
@@ -178,9 +201,10 @@ astar = aStarSearch
 ucs = uniformCostSearch
 
 
-a = { 'a' : (1,2,3,4) }
+a = [1,2,3];
+a.insert(0,5)
 
-print a['a']
+print a
 
-# graph = { 'A': [('B', '0', 1.0), ('G', '1', 2.0), ('D', '2', 4.0)], 'B': [('D', '0', 8.0)], 'D': [('G', '0', 16.0)], 'G': [] }
+
 
