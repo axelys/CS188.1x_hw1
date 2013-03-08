@@ -84,13 +84,65 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    start = problem.getStartState();
+
+    stack = [ start ]
+    expanded = []
+
+    # ???? ????? ????????? ???? ? ?????????
+    # ?????????? ??????? expand
+    
+    node_list = { start: { 'action': None, 'cost': None, 'parent' : None } };
+
+    while len(stack) > 0 :
+
+        # ????? ??????? ?? ?????
+        
+        current = stack.pop()
+
+        # ????????? ???? ??? ?????????????
+        # ???? ??? ???? - ????????? ????
+        
+        if problem.isGoalState(current) :
+            expanded.append( current )
+            return getActions(current, node_list)
+        
+        # ???? ??? -
+        # ????????? ??????????? ?? ??? ???? ??????
+        # ???? ??? - ??????????? ???? current ? ?????? ????? ? ????
+        #elif current not in visited :
+        else :
+            
+            for node in problem.getSuccessors( current ) :
+                state, action, cost = node
+                if (state not in expanded) :
+                    
+                    expanded.append( current )
+                    node_list[state] = { 'action':action, 'cost':cost, 'parent' : current }
+                    stack.append( state )
+                    
+                
+
+def getActions(state, nodes):
+
+    result = []
+
+    while (nodes[state]['parent'] != None) :
+        result.append(nodes[state]['action'])
+        state=nodes[state]['parent']
+
+    result.reverse()
+
+    return result
+
 
 def breadthFirstSearch(problem):
     """
     Search the shallowest nodes in the search tree first.
     """
     "*** YOUR CODE HERE ***"
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
@@ -111,8 +163,24 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     util.raiseNotDefined()
 
 
+
+def print_r(data):
+
+    print "----------------------------"
+    print data
+    print "----------------------------"
+
+
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+
+
+a = { 'a' : (1,2,3,4) }
+
+print a['a']
+
+# graph = { 'A': [('B', '0', 1.0), ('G', '1', 2.0), ('D', '2', 4.0)], 'B': [('D', '0', 8.0)], 'D': [('G', '0', 16.0)], 'G': [] }
+
