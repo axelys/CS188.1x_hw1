@@ -127,8 +127,6 @@ def getActions(state, nodes):
 
     result = []
 
-    print_r(nodes)
-
     while (nodes[state]['parent'] != None) :
         result.append(nodes[state]['action'])
         state=nodes[state]['parent']
@@ -169,9 +167,35 @@ def breadthFirstSearch(problem):
                 
 
 def uniformCostSearch(problem):
+    
     "Search the node of least total cost first. "
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    start = problem.getStartState()
+    queue = util.PriorityQueue()
+
+    queue.push( (start, [], 0) , 0 )
+
+    node_list = { start: { 'action': None, 'cost': None, 'parent' : None } };
+    
+    while not queue.isEmpty():
+        
+        current_node, current_path, current_cost = queue.pop()
+        if problem.isGoalState(current_node):
+            return current_path
+        else:
+            for expanded in problem.getSuccessors(current_node):
+
+                node, action, cost = expanded
+                item = (node, current_path + [action], current_cost + cost)
+                if node in node_list:
+                    if node_list[node]['cost'] > current_cost + cost:
+                        queue.push(item, current_cost + cost)
+                        node_list[node] = { 'action':current_path + [action], 'cost':cost, 'parent' : node }
+                else:
+                    queue.push(item, current_cost +cost)
+                    node_list[node] = { 'action':current_path + [action], 'cost':cost, 'parent' : node }
+                    
 
 def nullHeuristic(state, problem=None):
     """
@@ -201,10 +225,6 @@ astar = aStarSearch
 ucs = uniformCostSearch
 
 
-a = [1,2,3];
-a.insert(0,5)
-
-print a
 
 
 
